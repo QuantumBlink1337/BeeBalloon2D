@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1766481700543752273}
   - component: {fileID: 4858489836415444529}
   - component: {fileID: 5371567538958646487}
+  - component: {fileID: 6934622351553562835}
   m_Layer: 0
   m_Name: Redzone
   m_TagString: Untagged
@@ -130,6 +131,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6934622351553562835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631492533450519603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88e9c06cb17a56d4ab814c5ff3395c54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2592133893905491114
 GameObject:
   m_ObjectHideFlags: 0

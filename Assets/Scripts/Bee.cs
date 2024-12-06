@@ -30,8 +30,8 @@ public class Bee : MonoBehaviour
         Vector2 targetLocation = _camera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 currentLocation = _rigidbody.position;
         
-        Debug.Log("Current Location: " + currentLocation);
-        Debug.Log("Target Location: " + targetLocation);
+        // Debug.Log("Current Location: " + currentLocation);
+        // Debug.Log("Target Location: " + targetLocation);
         
         Vector2 newPosition = Vector2.MoveTowards(currentLocation, targetLocation, Time.fixedDeltaTime * moveSpeed);
         

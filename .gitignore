@@ -7,3 +7,4 @@ Temp/
 obj/
 .idea/
 Assembly-CSharp.csproj
+.DS_Store
