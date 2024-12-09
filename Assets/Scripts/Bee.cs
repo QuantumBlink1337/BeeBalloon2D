@@ -102,7 +102,11 @@ public class Bee : MonoBehaviour
         }
         else if (collision.gameObject.GetComponent<Balloon>() != null)
         {
-            Debug.Log("Collision is a balloon");
+            Debug.Log("Collision is an Balloon");
+            Destroy(collision.gameObject);
+            BeeBalloon.Score++;
+            BeeBalloon.CheckIfAllBalloonsPopped();
+
         }
     }
 

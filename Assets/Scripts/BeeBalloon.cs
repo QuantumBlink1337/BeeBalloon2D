@@ -40,4 +40,13 @@ public class BeeBalloon : MonoBehaviour
             Time.timeScale = _isPaused ? 0 : 1;
         }
     }
+
+    public static void CheckIfAllBalloonsPopped()
+    {
+        if (FindObjectsOfType<Balloon>().Length == 0)
+        {
+            Debug.Log("All balloons popped");
+        }
+        
+    }
 }
