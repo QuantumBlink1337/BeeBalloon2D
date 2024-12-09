@@ -43,7 +43,8 @@ public class BeeBalloon : MonoBehaviour
 
     public static void CheckIfAllBalloonsPopped()
     {
-        if (FindObjectsOfType<Balloon>().Length == 0)
+        var allBalloons = FindObjectsOfType<Balloon>();
+        if (allBalloons.Length <= 1)
         {
             Debug.Log("All balloons popped");
         }

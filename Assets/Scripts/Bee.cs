@@ -122,7 +122,6 @@ public class Bee : MonoBehaviour
     {
         if (_spriteRenderers == null || _spriteRenderers.Length == 0)
         {
-            Debug.LogWarning("SpriteRenderers not available yet, waiting...");
             yield return null;  // Wait for one frame to ensure everything is set up
             _spriteRenderers = GetComponentsInChildren<SpriteRenderer>(true);  // Re-fetch just in case
         }
