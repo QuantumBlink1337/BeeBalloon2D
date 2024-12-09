@@ -10,41 +10,64 @@ public class BeeBalloon : MonoBehaviour
     [SerializeField]
     private int defaultLives = 3;
     
-    private static int score = 0;
+    private int score = 0;
 
-    private static int lives = 0;
+    private int lives = 0;
     
-    private static bool _isPaused = false;
-    private static List<String> _scenes = new List<String>{"Level1", "Level2" };
-    private static int currentScene = 0;
-    public static int Score
+    private bool _isPaused = false;
+    private List<String> _scenes = new List<String>{"Level1", "Level2" };
+    private int currentScene = 0;
+    
+    private static BeeBalloon _instance;
+    
+    public static BeeBalloon Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<BeeBalloon>();
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("BeeBalloon");
+                    _instance = go.AddComponent<BeeBalloon>();
+                    DontDestroyOnLoad(go);  // Keep the Singleton alive between scenes
+                }
+            }
+            return _instance;
+        }
+    }
+    public  int Score
     {
         get => score;
         set
         {
             score = value;
-            PlayerPrefs.SetInt("Score", score); // Save score to PlayerPrefs
         }
     }
 
-    public static int Lives
+    public  int Lives
     {
         get => lives;
         set
         {
             lives = value;
-            PlayerPrefs.SetInt("Lives", lives); // Save lives to PlayerPrefs
         } 
     }
 
     private void Awake()
     {
-        lives = defaultLives;
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);  // Ensures only one instance of BeeBalloon exists
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);  // Persist the object across scenes
+        lives = defaultLives;  // Set the default lives
+        score = 0; 
         
-        score = PlayerPrefs.GetInt("Score", 0);
-        lives = PlayerPrefs.GetInt("Lives", 3);
-        
-        Debug.Log($"Score: {score}, Lives: {lives}");
         
     }
 
@@ -57,7 +80,7 @@ public class BeeBalloon : MonoBehaviour
         }
     }
 
-    public static void CheckIfAllBalloonsPopped()
+    public  void CheckIfAllBalloonsPopped()
     {
         var allBalloons = FindObjectsOfType<Balloon>();
         if (allBalloons.Length <= 1)
@@ -66,6 +89,7 @@ public class BeeBalloon : MonoBehaviour
             Debug.Log("All balloons popped");
             SceneManager.LoadScene(_scenes[currentScene]);
         }
+
         
     }
 }

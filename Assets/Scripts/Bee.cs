@@ -87,8 +87,8 @@ public class Bee : MonoBehaviour
         if (collision.gameObject.GetComponent<IObstacle>() != null && !_isVulnerable)
         {
             Debug.Log("Collision is an obstacle");
-            BeeBalloon.Lives--;
-            Debug.Log("Lives: " + BeeBalloon.Lives);
+            BeeBalloon.Instance.Lives--;
+            Debug.Log("Lives: " + BeeBalloon.Instance.Lives);
             if (collision.gameObject.GetComponent<IObstacle>().Removable)
             {
                 Destroy(collision.gameObject);
@@ -104,10 +104,12 @@ public class Bee : MonoBehaviour
         {
             Debug.Log("Collision is an Balloon");
             Destroy(collision.gameObject);
-            BeeBalloon.Score++;
-            BeeBalloon.CheckIfAllBalloonsPopped();
+            BeeBalloon.Instance.Score++;
+            BeeBalloon.Instance.CheckIfAllBalloonsPopped();
 
         }
+        Debug.Log($"Score: {BeeBalloon.Instance.Score}, Lives: {BeeBalloon.Instance.Lives}");
+
     }
 
     public void MakeInvulnerable()
