@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class Bee : MonoBehaviour
@@ -11,6 +13,10 @@ public class Bee : MonoBehaviour
 
     public Vector2 startingPosition;
     private RespawnManager _respawnManager;
+
+    private bool _isVulnerable = false;
+    private float _invulnerabilityTime = 2f;
+    private float _invulnerabilityTimer = 0f;
 
 
     
@@ -52,9 +58,21 @@ public class Bee : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (_isVulnerable)
+        {
+            _invulnerabilityTimer -= Time.fixedDeltaTime;
+            if (_invulnerabilityTimer <= 0)
+            {
+                _isVulnerable = false;
+            }
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<IObstacle>() != null)
+        if (collision.gameObject.GetComponent<IObstacle>() != null && !_isVulnerable)
         {
             Debug.Log("Collision is an obstacle");
             BeeBalloon.Lives--;
@@ -75,4 +93,13 @@ public class Bee : MonoBehaviour
             Debug.Log("Collision is a balloon");
         }
     }
+
+    public void MakeInvulnerable()
+    {
+        _isVulnerable = true;
+        _invulnerabilityTimer = _invulnerabilityTime;
+    }
+    
+    
+    
 }

@@ -25,5 +25,6 @@ public class RespawnManager : MonoBehaviour
 
         // Log to verify that the bee is active
         Debug.Log("Bee respawned and active: " + newBee.activeSelf);
+        newBee.GetComponent<Bee>().MakeInvulnerable();
     }
 }
