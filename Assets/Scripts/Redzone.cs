@@ -1,11 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Redzone : MonoBehaviour
+public class Redzone : MonoBehaviour, IObstacle
 {
-    void OnTriggerEnter2D(Collider2D other)
+    private bool _removable;
+
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     Debug.Log(other.gameObject.name);
+    // }
+    private void Awake()
     {
-        Debug.Log(other.gameObject.name);
+        _removable = false;
+    }
+
+    bool IObstacle.Removable
+    {
+        get => _removable;
+        set => _removable = value;
     }
 }

@@ -22,10 +22,10 @@ public class Balloon : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        Debug.Log(other.gameObject.name);
-        BeeBalloon.AddScore();
-        Destroy(this.gameObject);
-    }
+    // Updateprivate void OnCollisionEnter2D(Collision2D other)
+    // {
+    //     Debug.Log(other.gameObject.name);
+    //     BeeBalloon.AddScore();
+    //     Destroy(this.gameObject);
+    // }
 }
