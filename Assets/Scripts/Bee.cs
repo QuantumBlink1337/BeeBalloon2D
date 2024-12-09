@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bee : MonoBehaviour
@@ -12,19 +10,25 @@ public class Bee : MonoBehaviour
     private Rigidbody2D _rigidbody;
 
     public Vector2 startingPosition;
+    private RespawnManager _respawnManager;
 
-    [SerializeField] private GameObject beePrefab;
-    
+
     
     void Start()
     {
         _camera = Camera.main;
         _rigidbody = GetComponent<Rigidbody2D>();
         startingPosition = transform.position;
+        _respawnManager = FindObjectOfType<RespawnManager>();
 
         if (_camera == null)
         {
             Debug.LogError("No camera attached");
+        }
+
+        if (_respawnManager == null)
+        {
+            Debug.LogError("No respawn manager in scene");
         }
     }
 
@@ -60,8 +64,11 @@ public class Bee : MonoBehaviour
                 Destroy(collision.gameObject);
             }
             gameObject.transform.position = startingPosition;
-            
-            
+
+            _respawnManager.RespawnBee(startingPosition);
+            gameObject.SetActive(false);
+
+
         }
         else if (collision.gameObject.GetComponent<Balloon>() != null)
         {
