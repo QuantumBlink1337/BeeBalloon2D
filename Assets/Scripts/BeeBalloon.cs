@@ -12,6 +12,8 @@ public class BeeBalloon : MonoBehaviour
     private static int score = 0;
 
     private static int lives = 0;
+    
+    private static bool _isPaused = false;
 
     public static int Score
     {
@@ -28,5 +30,14 @@ public class BeeBalloon : MonoBehaviour
     private void Awake()
     {
         lives = defaultLives;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            _isPaused = !_isPaused;
+            Time.timeScale = _isPaused ? 0 : 1;
+        }
     }
 }
