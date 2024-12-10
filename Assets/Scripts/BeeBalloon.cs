@@ -12,8 +12,15 @@ public class BeeBalloon : MonoBehaviour
 
     private int lives = 0;
 
-    private int level = 0;
-    private int _startingLevel = 1; 
+    private int level = 1;
+    private int _startingLevel = 1;
+    private int _losingLevel;
+    
+    private bool wonGame = false;
+
+    public bool WonGame => wonGame;
+    public int LosingLevel => _losingLevel;
+    
 
     private float timeleft = 0;
 
@@ -22,7 +29,7 @@ public class BeeBalloon : MonoBehaviour
     public static bool _isPaused = false;
     
     private List<String> _scenes = new() {"Level1", "Level2", "Level3"};
-    
+
     private Camera _camera;
     
     private static BeeBalloon _instance;
@@ -58,12 +65,6 @@ public class BeeBalloon : MonoBehaviour
         set
         {
             lives = value;
-            if (lives == 0)
-            {
-                Destroy(gameObject);
-                Destroy(FindObjectOfType<BeeBalloon>());
-                SceneManager.LoadScene("Outro");
-            }
         } 
     }
 
@@ -86,6 +87,14 @@ public class BeeBalloon : MonoBehaviour
         get => (int)timeleft;
     }
 
+    public void GameOver(bool won)
+    {
+        wonGame = won; 
+        PlayerPrefs.SetInt("level", 0);
+        PlayerPrefs.SetInt("score", 0);
+        _losingLevel = level;
+        SceneManager.LoadScene("Outro");
+    }
     public void PrepareGame()
     {
         _camera.orthographicSize = 23f;
@@ -105,7 +114,8 @@ public class BeeBalloon : MonoBehaviour
         score = 0;
         timeleft = defaultTime;
         level = 1;
-        _camera = GetComponent<Camera>();
+        _camera = Camera.main;
+        DontDestroyOnLoad(_camera);
 
         /*
          * If the player previously played, retrieve the current level. If it's within an acceptable range,
@@ -117,6 +127,7 @@ public class BeeBalloon : MonoBehaviour
             if (prefsLevel <= _scenes.Count && prefsLevel > 0)
             {
                 _startingLevel = prefsLevel;
+                Level = prefsLevel; 
             }
         }
         Debug.Log("Starting Level: " + _startingLevel);
@@ -150,8 +161,12 @@ public class BeeBalloon : MonoBehaviour
             BeeBalloon.Instance.timeleft -= Time.deltaTime; // Reduce time by elapsed frame time
             if (BeeBalloon.Instance.timeleft < 0)
             {
-                Destroy(gameObject);
-                SceneManager.LoadScene("Outro");
+                GameOver(false);
+            }
+
+            if (lives <= 0)
+            {
+                GameOver(false);
             }
         }
     }
@@ -161,14 +176,13 @@ public class BeeBalloon : MonoBehaviour
         var allBalloons = FindObjectsOfType<Balloon>();
         if (allBalloons.Length <= 1)
         {
-            level++;
             if (level > (_scenes.Count - 1))
             {
                 Debug.Log("All levels completed");
-                PlayerPrefs.SetInt("level", 0);
-                PlayerPrefs.SetInt("score", 0);
-                SceneManager.LoadScene("Outro");
+                GameOver(true);
+                return;
             }
+            level++;
             PlayerPrefs.SetInt("level", level);
             //add leftover time as points!
             score += TimeLeft * 10;

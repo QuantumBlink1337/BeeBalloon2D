@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class outroUI : MonoBehaviour
@@ -11,10 +12,9 @@ public class outroUI : MonoBehaviour
 
     void Start()
     {
-        var currentLevel = BeeBalloon.Instance.Level;
-        if (currentLevel < BeeBalloon.Instance.Scenes.Count - 1)
+        if (!BeeBalloon.Instance.WonGame)
         {
-            endGameText.text = "GAME OVER! Defeated at Level " + currentLevel ;
+            endGameText.text = "GAME OVER! Defeated at Level " + BeeBalloon.Instance.LosingLevel.ToString(); ;
         }
         else
         {
@@ -31,5 +31,10 @@ public class outroUI : MonoBehaviour
     {
         PlayerPrefs.SetString("feedback", inputText.text);
         PlayerPrefs.Save();
+    }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene("Intro");
     }
 }
