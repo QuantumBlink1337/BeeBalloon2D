@@ -72,6 +72,7 @@ public class Bee : MonoBehaviour
 
     private void Update()
     {
+        RotateTowardsMouse();
         if (_isVulnerable)
         {
             _invulnerabilityTimer -= Time.fixedDeltaTime;
@@ -80,6 +81,21 @@ public class Bee : MonoBehaviour
                 _isVulnerable = false;
             }
         }
+    }
+    void RotateTowardsMouse()
+    {
+        Vector3 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0; // Ensure z-coordinate is zero for 2D calculations
+
+        Vector3 direction = mousePosition - transform.position; // Calculate the direction vector
+        // if magnitude is small enough then the mouse cursor is overhead
+        if (direction.magnitude < 0.1f)
+        {
+            return;
+        }
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // Convert direction to angle
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 90)); // Apply the rotation
+        // 90 degree offsets the direction the sprite faces
     }
 
     void OnTriggerEnter2D(Collider2D collision)
