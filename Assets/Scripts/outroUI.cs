@@ -35,6 +35,6 @@ public class outroUI : MonoBehaviour
 
     public void PlayAgain()
     {
-        SceneManager.LoadScene("Intro");
+        BeeBalloon.Instance.RestartGame();
     }
 }

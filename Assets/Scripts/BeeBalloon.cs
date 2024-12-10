@@ -89,9 +89,13 @@ public class BeeBalloon : MonoBehaviour
 
     public void GameOver(bool won)
     {
+        if (SceneManager.GetActiveScene().name == "Outro")
+            return; // Avoid reloading Outro scene
         wonGame = won; 
         PlayerPrefs.SetInt("level", 0);
         PlayerPrefs.SetInt("score", 0);
+        PlayerPrefs.SetInt("lives", defaultLives);
+        lives = defaultLives;
         _losingLevel = level;
         SceneManager.LoadScene("Outro");
     }
@@ -99,6 +103,13 @@ public class BeeBalloon : MonoBehaviour
     {
         _camera.orthographicSize = 23f;
         SceneManager.LoadScene(_scenes[_startingLevel-1]);
+    }
+
+    public void RestartGame()
+    {
+        _camera.orthographicSize = 5f;
+        SceneManager.LoadScene("Intro");
+
     }
     private void Awake()
     {
