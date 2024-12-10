@@ -28,7 +28,7 @@ public class BeeBalloon : MonoBehaviour
     
     public static bool _isPaused = false;
     
-    private List<String> _scenes = new() {"Level1", "Level2", "Level3"};
+    private List<String> _scenes = new() {"Level1", "Level2", "Level3, Level4"};
 
     private Camera _camera;
     
