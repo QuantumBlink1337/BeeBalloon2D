@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,15 +13,17 @@ public class BeeBalloon : MonoBehaviour
     private int lives = 0;
 
     private int level = 0;
-    private int _startingLevel; 
+    private int _startingLevel = 1; 
 
     private float timeleft = 0;
 
     public float defaultTime = 30f;
     
     public static bool _isPaused = false;
+    
     private List<String> _scenes = new() {"Level1", "Level2", "Level3"};
-    private int currentScene = 0;
+    
+    private Camera _camera;
     
     private static BeeBalloon _instance;
     
@@ -40,6 +40,9 @@ public class BeeBalloon : MonoBehaviour
             return _instance;
         }
     }
+
+    public List<String> Scenes => _scenes;
+
     public  int Score
     {
         get => score;
@@ -75,7 +78,7 @@ public class BeeBalloon : MonoBehaviour
 
     public int StartingLevel
     {
-        get => level;
+        get => _startingLevel;
     }
 
     public int TimeLeft
@@ -83,6 +86,11 @@ public class BeeBalloon : MonoBehaviour
         get => (int)timeleft;
     }
 
+    public void PrepareGame()
+    {
+        _camera.orthographicSize = 23f;
+        SceneManager.LoadScene(_scenes[_startingLevel-1]);
+    }
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -97,6 +105,7 @@ public class BeeBalloon : MonoBehaviour
         score = 0;
         timeleft = defaultTime;
         level = 1;
+        _camera = GetComponent<Camera>();
 
         /*
          * If the player previously played, retrieve the current level. If it's within an acceptable range,
@@ -105,11 +114,13 @@ public class BeeBalloon : MonoBehaviour
         if (PlayerPrefs.HasKey("level"))
         {
             int prefsLevel = PlayerPrefs.GetInt("level");
-            if (prefsLevel <= _scenes.Count && prefsLevel >= 0)
+            if (prefsLevel <= _scenes.Count && prefsLevel > 0)
             {
                 _startingLevel = prefsLevel;
             }
         }
+        Debug.Log("Starting Level: " + _startingLevel);
+
         /*
          * If the player previously played, retrieve their previous score. 
          */
@@ -122,6 +133,8 @@ public class BeeBalloon : MonoBehaviour
                 score = prefsScore;
             }
         }
+        Debug.Log("Starting Score: " + score);
+
 
     }
 

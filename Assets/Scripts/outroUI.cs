@@ -11,11 +11,14 @@ public class outroUI : MonoBehaviour
 
     void Start()
     {
-        endGameText.text = "GAME OVER!";
-        if (PlayerPrefs.HasKey("level"))
+        var currentLevel = BeeBalloon.Instance.Level;
+        if (currentLevel < BeeBalloon.Instance.Scenes.Count - 1)
         {
-            int prefsLevel = PlayerPrefs.GetInt("level");
-            endGameText.text = "GAME OVER on level: " + prefsLevel;
+            endGameText.text = "GAME OVER! Defeated at Level " + currentLevel ;
+        }
+        else
+        {
+            endGameText.text = "You won!";
         }
         if (PlayerPrefs.HasKey("feedback"))
         {

@@ -8,37 +8,14 @@ public class introUI : MonoBehaviour
 {
     private string levelname;
     public Text startButtonText;
-    public bool resetPrefs = false;
 
     void Start()
     {
-        if (resetPrefs)
-        {
-            PlayerPrefs.SetInt("level", 1);
-            PlayerPrefs.SetInt("score", 0);
-            PlayerPrefs.Save();
-        }
-        if (PlayerPrefs.HasKey("level"))
-        {
-            int prefsLevel = PlayerPrefs.GetInt("level");
-            if (prefsLevel > 1)
-            {
-                levelname = "Level"+prefsLevel;
-                startButtonText.text = "Resume Level "+prefsLevel;
-                return;
-            }
-        }
-        else
-        {
-            PlayerPrefs.SetInt("level", 1);
-            PlayerPrefs.Save();
-        }
-        levelname = "Level1";
-        startButtonText.text = "Start";
+        startButtonText.text = "Start " + BeeBalloon.Instance.Scenes[BeeBalloon.Instance.StartingLevel-1];
     }
 
     public void LoadGame()
     {
-        SceneManager.LoadScene(levelname);
+        BeeBalloon.Instance.PrepareGame();
     }
 }
