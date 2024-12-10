@@ -15,13 +15,14 @@ public class BeeBalloon : MonoBehaviour
     private int lives = 0;
 
     private int level = 0;
+    private int _startingLevel; 
 
     private float timeleft = 0;
 
     public float defaultTime = 30f;
     
     public static bool _isPaused = false;
-    private List<String> _scenes = new List<String>{"Level1", "Level2" };
+    private List<String> _scenes = new() {"Level1", "Level2", "Level3"};
     private int currentScene = 0;
     
     private static BeeBalloon _instance;
@@ -30,16 +31,12 @@ public class BeeBalloon : MonoBehaviour
     {
         get
         {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<BeeBalloon>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("BeeBalloon");
-                    _instance = go.AddComponent<BeeBalloon>();
-                    DontDestroyOnLoad(go);  // Keep the Singleton alive between scenes
-                }
-            }
+            if (_instance) return _instance;
+            _instance = FindObjectOfType<BeeBalloon>();
+            if (_instance) return _instance;
+            GameObject go = new GameObject("BeeBalloon");
+            _instance = go.AddComponent<BeeBalloon>();
+            DontDestroyOnLoad(go);  // Keep the Singleton alive between scenes
             return _instance;
         }
     }
@@ -76,6 +73,11 @@ public class BeeBalloon : MonoBehaviour
         }
     }
 
+    public int StartingLevel
+    {
+        get => level;
+    }
+
     public int TimeLeft
     {
         get => (int)timeleft;
@@ -96,14 +98,21 @@ public class BeeBalloon : MonoBehaviour
         timeleft = defaultTime;
         level = 1;
 
+        /*
+         * If the player previously played, retrieve the current level. If it's within an acceptable range,
+         * load it as a property.
+         */
         if (PlayerPrefs.HasKey("level"))
         {
             int prefsLevel = PlayerPrefs.GetInt("level");
-            if (prefsLevel != 0)
+            if (prefsLevel <= _scenes.Count && prefsLevel >= 0)
             {
-                level = prefsLevel;
+                _startingLevel = prefsLevel;
             }
         }
+        /*
+         * If the player previously played, retrieve their previous score. 
+         */
 
         if (PlayerPrefs.HasKey("score"))
         {
@@ -140,14 +149,19 @@ public class BeeBalloon : MonoBehaviour
         if (allBalloons.Length <= 1)
         {
             level++;
+            if (level > (_scenes.Count - 1))
+            {
+                Debug.Log("All levels completed");
+                PlayerPrefs.SetInt("level", 0);
+                PlayerPrefs.SetInt("score", 0);
+                SceneManager.LoadScene("Outro");
+            }
             PlayerPrefs.SetInt("level", level);
             //add leftover time as points!
             score += TimeLeft * 10;
             PlayerPrefs.SetInt("score", score);
             PlayerPrefs.Save();
-            currentScene++;
-            Debug.Log("All balloons popped");
-            SceneManager.LoadScene(_scenes[currentScene]);
+            SceneManager.LoadScene(_scenes[level-1]);
         }
 
         
